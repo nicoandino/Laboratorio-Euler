@@ -1,0 +1,57 @@
+import matplotlib.pyplot as plt
+
+def metodo_euler(edo, x0, y0, xf, h):
+    # N = numero de pasos
+    N = int((xf - x0) / h)
+    valores_x = [x0]
+    valores_y = [y0]
+    x, y = x0, y0
+    
+    #agrega el valor de x,y obtenido por euler
+    for i in range(N):
+        y += h * eval(edo, {"x": x, "y": y})
+        x += h
+        valores_x.append(x)
+        valores_y.append(y)
+    
+    return valores_x, valores_y
+
+def menu():
+    print("1 -> Ecuacion diferencial algebraica")
+    print("2 -> Circuito electrico")
+    opcion = input("Ingrese 1 o 2: ")
+
+    if opcion == "1":
+        #ingresa los datos para una EDO algebraica
+        edo = input("Ingrese la EDO en funcion de x e y (ej: 0.2*x*y): ")
+        x0 = float(input("Ingrese x0: "))
+        y0 = float(input("Ingrese y0: "))
+        xf = float(input("Ingrese el valor final de x: "))
+        h = float(input("Ingrese el valor del paso (h): "))
+
+    elif opcion == "2":
+        #ingresa los datos para una EDO circuito electrico
+        ecuacion = input("Ingrese la ecuacion del circuito en funcion de I (ej: 15 - 3*I): ")
+        edo = ecuacion.replace("I", "y")
+        x0 = float(input("Ingrese t0: "))
+        y0 = float(input("Ingrese I(t0): "))
+        xf = float(input("Ingrese el valor final de t: "))
+        h = float(input("Ingrese el valor del paso (h): "))
+        return
+
+    valores_x, valores_y = metodo_euler(edo, x0, y0, xf, h)
+    
+    #mostrar resultados en consola
+    print("\nResultados:")
+    for i, (xi, yi) in enumerate(zip(valores_x, valores_y)):
+        print(f"Paso {i}: x = {xi:.4f}, y = {yi:.4f}")
+    
+    #grafico
+    plt.plot(valores_x, valores_y, "bo-")
+    plt.xlabel("x (o t)")
+    plt.ylabel("y (o I)")
+    plt.title("Funcion Solucion por el metodo de Euler")
+    plt.grid(True)
+    plt.show()
+
+menu()
